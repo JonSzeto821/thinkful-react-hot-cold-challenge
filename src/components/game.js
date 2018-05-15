@@ -17,13 +17,13 @@ export default class Game extends React.Component {
 		};
 	}
 
-	restartGame(){
-		this.setState({
-			guesses: [];
-			feedback: 'Take a guess!',
-			auralStatus: '',
-			correctAnswer: Math.random(Math.random()*100) + 1
-		});
+	restartGame() {
+	  this.setState({
+	    guesses: [],
+	    feedback: 'Make your guess!',
+	    auralStatus: '',
+	    correctAnswer: Math.floor(Math.random() * 100) + 1
+	  });
 	}
 
 	makeGuess(guess) {
@@ -50,7 +50,7 @@ export default class Game extends React.Component {
 
 		this.setState({
 			feedback,
-			guesses: [...state.guesses, guess]
+			guesses: [...this.state.guesses, guess]
 		});
 
 		document.title = feedback ? `${feedback} | Hot or Cold` : 'Hot or Cold';
@@ -77,14 +77,23 @@ export default class Game extends React.Component {
 
 		return(
 			<div>
-				<Header />
+				<Header 
+					onRestartGame = {() => this.restartGame()}
+					onGenerateAuralUpdate={() => this.generateAuralUpdate()}
+				/>
 				<main role='main'>
-					<GuessSection />
-					<StatusSection />
+					<GuessSection 
+						feedback={feedback}
+						guessCount={guessCount}
+						onMakeGuess={guess => this.makeGuess(guess)}
+					/>
+					<StatusSection 
+						guesses={guesses}
+						auralStatus={auralStatus}
+					/>
 					<InfoSection />
 				</main>
 			</div>
-
 			);
 	}
 }
